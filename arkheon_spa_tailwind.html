@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ARKHEON – Kiến trúc xanh & công nghệ xây dựng cao cấp</title>
+  <meta name="description" content="ARKHEON là studio kiến trúc xanh và công nghệ xây dựng ứng dụng BIM, AI, IoT để tối ưu thiết kế, thi công và vận hành công trình." />
+  <meta name="theme-color" content="#0B3D2E" />
+  <meta property="og:title" content="ARKHEON – Kiến trúc xanh & công nghệ xây dựng cao cấp" />
+  <meta property="og:description" content="Xây dựng giá trị nguyên bản, kiến tạo tương lai bằng BIM, AI, IoT và thiết kế bền vững." />
+  <meta property="og:type" content="website" />
+
+  <!-- Font hiện đại, có fallback nên vẫn chạy ổn khi không có mạng -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Be Vietnam Pro', 'Inter', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            forest: '#0B3D2E',
+            neon: '#22C55E',
+            charcoal: '#1F2937',
+            cool: '#9CA3AF',
+            mist: '#F3F4F6',
+            ink: '#061F1A',
+          },
+          boxShadow: {
+            glow: '0 0 0 1px rgba(34,197,94,.22), 0 28px 80px rgba(34,197,94,.16)',
+            deep: '0 30px 100px rgba(0,0,0,.35)',
+          },
+          backgroundImage: {
+            'hero-gradient': 'linear-gradient(120deg, rgba(6,31,26,.96), rgba(6,31,26,.70), rgba(11,61,46,.52))',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- AOS Animate On Scroll CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+
+  <style>
+    :root {
+      --forest: #0B3D2E;
+      --neon: #22C55E;
+      --ink: #061F1A;
+      --charcoal: #1F2937;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Be Vietnam Pro', Inter, system-ui, sans-serif;
+      background: #061F1A;
+      color: #1F2937;
+      overflow-x: hidden;
+    }
+
+    ::selection {
+      color: #061F1A;
+      background: #22C55E;
+    }
+
+    /* Ảnh hero có gradient phủ để text luôn rõ */
+    .hero-bg {
+      background-image:
+        linear-gradient(120deg, rgba(6,31,26,.96), rgba(6,31,26,.76), rgba(11,61,46,.44)),
+        url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2400&q=85');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    @media (max-width: 768px) {
+      .hero-bg { background-attachment: scroll; }
+    }
+
+    /* Grid nền công nghệ nhẹ */
+    .tech-grid-bg {
+      background-image:
+        linear-gradient(rgba(34,197,94,.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34,197,94,.07) 1px, transparent 1px);
+      background-size: 54px 54px;
+    }
+
+    /* Navbar đổi trạng thái khi scroll */
+    .navbar {
+      transition: background .35s ease, box-shadow .35s ease, backdrop-filter .35s ease, border-color .35s ease;
+    }
+
+    .navbar.scrolled {
+      background: rgba(11, 61, 46, .94);
+      backdrop-filter: blur(14px);
+      border-color: rgba(34, 197, 94, .18);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .24);
+    }
+
+    /* Glassmorphism 2.0 */
+    .glass {
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.14);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 24px 80px rgba(0,0,0,.18);
+    }
+
+    .glass-card {
+      background: rgba(255,255,255,.84);
+      border: 1px solid rgba(11,61,46,.10);
+      backdrop-filter: blur(12px);
+      transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease, background .35s ease;
+    }
+
+    .glass-card:hover {
+      transform: translateY(-10px);
+      border-color: rgba(34,197,94,.58);
+      box-shadow: 0 0 0 1px rgba(34,197,94,.22), 0 28px 80px rgba(34,197,94,.16);
+      background: rgba(255,255,255,.94);
+    }
+
+    .dark-glass-card {
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(12px);
+      transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease, background .35s ease;
+    }
+
+    .dark-glass-card:hover {
+      transform: translateY(-10px);
+      border-color: rgba(34,197,94,.55);
+      box-shadow: 0 0 0 1px rgba(34,197,94,.18), 0 30px 90px rgba(0,0,0,.30);
+      background: rgba(255,255,255,.10);
+    }
+
+    .btn-glow {
+      box-shadow: 0 0 0 1px rgba(34,197,94,.22), 0 20px 50px rgba(34,197,94,.30);
+    }
+
+    .btn-glow:hover {
+      box-shadow: 0 0 0 1px rgba(34,197,94,.55), 0 28px 75px rgba(34,197,94,.42);
+    }
+
+    .image-cover {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .portfolio-card {
+      transform-origin: center;
+      transition: opacity .35s ease, transform .35s ease, filter .35s ease;
+    }
+
+    .portfolio-card.hidden-card {
+      display: none;
+    }
+
+    .filter-btn.active {
+      background: linear-gradient(135deg, #22C55E, #0B3D2E);
+      color: #fff;
+      border-color: rgba(34,197,94,.8);
+      box-shadow: 0 18px 40px rgba(34,197,94,.25);
+    }
+
+    .roadmap-line::before {
+      content: '';
+      position: absolute;
+      top: 38px;
+      left: 8%;
+      right: 8%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(34,197,94,.65), transparent);
+    }
+
+    @media (max-width: 1024px) {
+      .roadmap-line::before { display: none; }
+    }
+
+    .pulse-dot {
+      position: relative;
+    }
+
+    .pulse-dot::after {
+      content: '';
+      position: absolute;
+      inset: -8px;
+      border: 1px solid rgba(34,197,94,.45);
+      border-radius: 999px;
+      animation: pulseRing 2.2s infinite;
+    }
+
+    @keyframes pulseRing {
+      0% { transform: scale(.75); opacity: .8; }
+      100% { transform: scale(1.55); opacity: 0; }
+    }
+
+    .float-icon { animation: floatIcon 4.5s ease-in-out infinite; }
+    .float-icon.delay-1 { animation-delay: .8s; }
+    .float-icon.delay-2 { animation-delay: 1.5s; }
+
+    @keyframes floatIcon {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(2deg); }
+    }
+
+    .draw-line {
+      stroke-dasharray: 180;
+      stroke-dashoffset: 180;
+      animation: drawLine 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes drawLine {
+      to { stroke-dashoffset: 0; }
+    }
+
+    .input-modern {
+      width: 100%;
+      border-radius: 18px;
+      border: 1px solid rgba(31,41,55,.12);
+      background: rgba(255,255,255,.92);
+      padding: 14px 16px;
+      outline: none;
+      transition: border .25s ease, box-shadow .25s ease, background .25s ease;
+    }
+
+    .input-modern:focus {
+      border-color: rgba(34,197,94,.70);
+      box-shadow: 0 0 0 5px rgba(34,197,94,.12);
+      background: #fff;
+    }
+
+    .form-error {
+      border-color: rgba(239,68,68,.85) !important;
+      box-shadow: 0 0 0 5px rgba(239,68,68,.12) !important;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ========================= NAVBAR ========================= -->
+  <header id="navbar" class="navbar fixed inset-x-0 top-0 z-50 border-b border-white/10 text-white">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
+      <a href="#home" class="flex items-center gap-3" aria-label="ARKHEON Home">
+        <!-- Logo SVG tự tạo: chữ A + cột nhà + đường cong sinh thái -->
+        <span class="grid h-12 w-12 place-items-center rounded-2xl bg-white/10 ring-1 ring-white/15 backdrop-blur">
+          <svg viewBox="0 0 96 72" class="h-9 w-11" aria-hidden="true">
+            <path d="M48 4 90 68H74L48 25 22 68H6Z" fill="white" />
+            <path d="M13 66C31 56 65 56 83 66" fill="none" stroke="#22C55E" stroke-width="5" stroke-linecap="round" />
+            <rect x="39" y="34" width="7" height="28" rx="1" fill="#22C55E" />
+            <rect x="50" y="24" width="7" height="38" rx="1" fill="#0B3D2E" />
+            <rect x="61" y="38" width="7" height="24" rx="1" fill="#9CA3AF" />
+          </svg>
+        </span>
+        <span>
+          <strong class="block text-lg font-black tracking-[0.22em]">ARKHEON</strong>
+          <small class="hidden text-[11px] text-white/70 sm:block">Xây dựng giá trị nguyên bản</small>
+        </span>
+      </a>
+
+      <nav class="hidden items-center gap-1 lg:flex" aria-label="Menu chính">
+        <a class="rounded-full px-4 py-2 text-sm font-semibold text-white/82 hover:bg-white/10 hover:text-white" href="#services">Dịch vụ</a>
+        <a class="rounded-full px-4 py-2 text-sm font-semibold text-white/82 hover:bg-white/10 hover:text-white" href="#portfolio">Dự án</a>
+        <a class="rounded-full px-4 py-2 text-sm font-semibold text-white/82 hover:bg-white/10 hover:text-white" href="#technology">Công nghệ</a>
+        <a class="rounded-full px-4 py-2 text-sm font-semibold text-white/82 hover:bg-white/10 hover:text-white" href="#roadmap">Quy trình</a>
+        <a class="rounded-full px-4 py-2 text-sm font-semibold text-white/82 hover:bg-white/10 hover:text-white" href="#news">Tin tức</a>
+        <a class="rounded-full px-4 py-2 text-sm font-semibold text-white/82 hover:bg-white/10 hover:text-white" href="#contact">Liên hệ</a>
+      </nav>
+
+      <div class="hidden items-center gap-3 lg:flex">
+        <a href="#contact" class="btn-glow rounded-full bg-gradient-to-r from-neon to-forest px-5 py-3 text-sm font-extrabold text-white transition hover:-translate-y-0.5">Tư vấn ngay</a>
+      </div>
+
+      <button id="menuBtn" class="grid h-11 w-11 place-items-center rounded-2xl border border-white/15 bg-white/10 lg:hidden" aria-label="Mở menu">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h16M4 12h16M4 17h16" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="hidden border-t border-white/10 bg-ink/95 px-5 py-4 backdrop-blur-xl lg:hidden">
+      <div class="grid gap-2">
+        <a class="rounded-2xl px-4 py-3 font-semibold hover:bg-white/10" href="#services">Dịch vụ</a>
+        <a class="rounded-2xl px-4 py-3 font-semibold hover:bg-white/10" href="#portfolio">Dự án</a>
+        <a class="rounded-2xl px-4 py-3 font-semibold hover:bg-white/10" href="#technology">Công nghệ</a>
+        <a class="rounded-2xl px-4 py-3 font-semibold hover:bg-white/10" href="#roadmap">Quy trình</a>
+        <a class="rounded-2xl px-4 py-3 font-semibold hover:bg-white/10" href="#news">Tin tức</a>
+        <a class="rounded-2xl px-4 py-3 font-semibold hover:bg-white/10" href="#contact">Liên hệ</a>
+        <a class="mt-2 rounded-2xl bg-gradient-to-r from-neon to-forest px-4 py-3 text-center font-extrabold" href="#contact">Tư vấn ngay</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="home">
+    <!-- ========================= HERO ========================= -->
+    <section class="hero-bg relative min-h-screen overflow-hidden pt-28 text-white lg:pt-36">
+      <div class="tech-grid-bg absolute inset-0 opacity-30"></div>
+      <div class="absolute -left-28 top-36 h-72 w-72 rounded-full bg-neon/20 blur-3xl"></div>
+      <div class="absolute -right-28 bottom-20 h-96 w-96 rounded-full bg-neon/10 blur-3xl"></div>
+
+      <div class="relative mx-auto grid max-w-7xl items-center gap-14 px-5 pb-20 pt-16 lg:grid-cols-[1.05fr_.95fr] lg:px-8 lg:pb-28">
+        <div data-aos="fade-up" data-aos-duration="900">
+          <div class="mb-6 inline-flex items-center gap-3 rounded-full border border-neon/30 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.22em] text-neon backdrop-blur">
+            <span class="h-2 w-2 rounded-full bg-neon shadow-[0_0_18px_#22C55E]"></span>
+            Green Construction · BIM · AI · IoT
+          </div>
+
+          <h1 class="max-w-4xl text-5xl font-black leading-[1.02] tracking-[-0.06em] sm:text-6xl lg:text-7xl xl:text-8xl">
+            Xây dựng xanh, công nghệ cao,
+            <span class="block bg-gradient-to-r from-neon via-emerald-200 to-white bg-clip-text text-transparent">chuẩn tương lai.</span>
+          </h1>
+
+          <p class="mt-7 max-w-2xl text-base leading-8 text-white/78 sm:text-lg">
+            ARKHEON kiến tạo công trình bằng kiến trúc bền vững, BIM, AI dự báo chi phí và IoT giám sát công trường — giúp chủ đầu tư nhìn rõ thiết kế, ngân sách và tiến độ trước khi ra quyết định.
+          </p>
+
+          <div class="mt-9 flex flex-col gap-4 sm:flex-row">
+            <a href="#portfolio" class="btn-glow rounded-full bg-gradient-to-r from-neon to-forest px-7 py-4 text-center font-extrabold text-white transition hover:-translate-y-1">Khám phá dự án</a>
+            <a href="#technology" class="rounded-full border border-white/18 bg-white/10 px-7 py-4 text-center font-extrabold text-white backdrop-blur transition hover:-translate-y-1 hover:border-neon/60 hover:bg-white/15">Xem công nghệ</a>
+          </div>
+
+          <div class="mt-12 grid max-w-2xl grid-cols-3 gap-3 sm:gap-5">
+            <div class="glass rounded-3xl p-4 sm:p-5">
+              <strong class="block text-3xl font-black text-neon sm:text-4xl">120+</strong>
+              <span class="text-xs text-white/65 sm:text-sm">Dự án mục tiêu</span>
+            </div>
+            <div class="glass rounded-3xl p-4 sm:p-5">
+              <strong class="block text-3xl font-black text-neon sm:text-4xl">35%</strong>
+              <span class="text-xs text-white/65 sm:text-sm">Giảm phát thải</span>
+            </div>
+            <div class="glass rounded-3xl p-4 sm:p-5">
+              <strong class="block text-3xl font-black text-neon sm:text-4xl">24/7</strong>
+              <span class="text-xs text-white/65 sm:text-sm">Dashboard live</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative" data-aos="zoom-in" data-aos-duration="1000" data-aos-delay="150">
+          <div class="glass rounded-[2rem] p-4 shadow-deep">
+            <div class="relative overflow-hidden rounded-[1.5rem]">
+              <img class="h-[330px] w-full object-cover sm:h-[430px]" src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1300&q=85" alt="Biệt thự hiện đại tích hợp cây xanh và ánh sáng tự nhiên" />
+              <div class="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/20 to-transparent"></div>
+              <div class="absolute bottom-5 left-5 right-5 rounded-3xl border border-white/14 bg-ink/70 p-5 backdrop-blur-xl">
+                <div class="flex items-center justify-between gap-4">
+                  <div>
+                    <p class="text-sm text-white/60">Green Villa Concept</p>
+                    <h2 class="mt-1 text-xl font-black">ARKHEON Eco Residence</h2>
+                  </div>
+                  <div class="rounded-2xl bg-neon px-4 py-3 text-center text-ink">
+                    <strong class="block text-2xl font-black">92</strong>
+                    <small class="font-bold">Green Score</small>
+                  </div>
+                </div>
+                <div class="mt-5 h-2 overflow-hidden rounded-full bg-white/10">
+                  <div class="h-full w-[92%] rounded-full bg-gradient-to-r from-neon to-emerald-200"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="absolute -left-4 top-10 hidden rounded-3xl border border-neon/35 bg-ink/80 p-4 text-white shadow-glow backdrop-blur-xl sm:block" data-aos="fade-right" data-aos-delay="500">
+            <span class="text-xs text-white/55">BIM Clash Check</span>
+            <strong class="mt-1 block text-lg text-neon">98.7% chính xác</strong>
+          </div>
+
+          <div class="absolute -right-4 bottom-14 hidden rounded-3xl border border-white/15 bg-white/10 p-4 text-white backdrop-blur-xl sm:block" data-aos="fade-left" data-aos-delay="650">
+            <span class="text-xs text-white/55">Tiến độ thi công</span>
+            <strong class="mt-1 block text-lg">68% hoàn thành</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= BRAND INTRO ========================= -->
+    <section class="bg-white px-5 py-16 lg:px-8">
+      <div class="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[.85fr_1.15fr] lg:items-center">
+        <div data-aos="fade-up">
+          <p class="mb-3 text-sm font-black uppercase tracking-[0.22em] text-forest">Tinh thần thương hiệu</p>
+          <h2 class="text-3xl font-black tracking-[-0.04em] text-charcoal sm:text-5xl">ARKHEON = nền móng nguyên bản + ánh sáng công nghệ.</h2>
+        </div>
+        <div class="grid gap-4 sm:grid-cols-3">
+          <div class="glass-card rounded-3xl p-6" data-aos="fade-up" data-aos-delay="100">
+            <strong class="text-neon">ARCHE</strong>
+            <p class="mt-3 text-sm leading-7 text-slate-600">Giá trị gốc, kết cấu vững chắc, thiết kế có lý do.</p>
+          </div>
+          <div class="glass-card rounded-3xl p-6" data-aos="fade-up" data-aos-delay="200">
+            <strong class="text-neon">GREEN</strong>
+            <p class="mt-3 text-sm leading-7 text-slate-600">Tối ưu ánh sáng, thông gió, vật liệu và vận hành.</p>
+          </div>
+          <div class="glass-card rounded-3xl p-6" data-aos="fade-up" data-aos-delay="300">
+            <strong class="text-neon">NEON</strong>
+            <p class="mt-3 text-sm leading-7 text-slate-600">BIM, AI, IoT và dữ liệu minh bạch cho công trường.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= SERVICES ========================= -->
+    <section id="services" class="bg-mist px-5 py-24 lg:px-8">
+      <div class="mx-auto max-w-7xl">
+        <div class="mx-auto max-w-3xl text-center" data-aos="fade-up">
+          <p class="mb-3 text-sm font-black uppercase tracking-[0.22em] text-forest">Dịch vụ</p>
+          <h2 class="text-4xl font-black tracking-[-0.05em] text-charcoal sm:text-6xl">Từ ý tưởng đến bàn giao, mọi thứ đều có dữ liệu.</h2>
+          <p class="mt-5 text-slate-600">ARKHEON kết hợp studio kiến trúc, đội thi công và nền tảng công nghệ để giảm mơ hồ trong quá trình xây dựng.</p>
+        </div>
+
+        <div class="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <article class="glass-card overflow-hidden rounded-[2rem]" data-aos="fade-up">
+            <img class="h-52 w-full object-cover" src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=900&q=80" alt="Bản vẽ kiến trúc và thiết kế 3D trên bàn làm việc" />
+            <div class="p-7">
+              <span class="rounded-full bg-neon/10 px-3 py-1 text-xs font-bold text-forest">01 · Design</span>
+              <h3 class="mt-4 text-2xl font-black text-charcoal">Thiết kế kiến trúc xanh</h3>
+              <p class="mt-3 text-sm leading-7 text-slate-600">Tối ưu công năng, ánh sáng, thông gió và trải nghiệm sống trong từng mét vuông.</p>
+            </div>
+          </article>
+
+          <article class="glass-card overflow-hidden rounded-[2rem]" data-aos="fade-up" data-aos-delay="100">
+            <img class="h-52 w-full object-cover" src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=900&q=80" alt="Công trường hiện đại với thiết bị thi công và kỹ sư giám sát" />
+            <div class="p-7">
+              <span class="rounded-full bg-neon/10 px-3 py-1 text-xs font-bold text-forest">02 · Build</span>
+              <h3 class="mt-4 text-2xl font-black text-charcoal">Thi công & giám sát</h3>
+              <p class="mt-3 text-sm leading-7 text-slate-600">Quản lý tiến độ, vật liệu, nghiệm thu và chi phí bằng dashboard minh bạch.</p>
+            </div>
+          </article>
+
+          <article class="glass-card overflow-hidden rounded-[2rem]" data-aos="fade-up" data-aos-delay="200">
+            <img class="h-52 w-full object-cover" src="https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?auto=format&fit=crop&w=900&q=80" alt="Kỹ sư sử dụng màn hình kỹ thuật số để mô phỏng mô hình xây dựng" />
+            <div class="p-7">
+              <span class="rounded-full bg-neon/10 px-3 py-1 text-xs font-bold text-forest">03 · BIM</span>
+              <h3 class="mt-4 text-2xl font-black text-charcoal">BIM & mô hình 3D</h3>
+              <p class="mt-3 text-sm leading-7 text-slate-600">Dựng mô hình số để kiểm tra xung đột, bóc tách khối lượng và trình bày phương án.</p>
+            </div>
+          </article>
+
+          <article class="glass-card overflow-hidden rounded-[2rem]" data-aos="fade-up">
+            <img class="h-52 w-full object-cover" src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=900&q=80" alt="Bảng phân tích tài chính và dự toán trên bàn làm việc" />
+            <div class="p-7">
+              <span class="rounded-full bg-neon/10 px-3 py-1 text-xs font-bold text-forest">04 · Cost</span>
+              <h3 class="mt-4 text-2xl font-black text-charcoal">Dự toán xây dựng</h3>
+              <p class="mt-3 text-sm leading-7 text-slate-600">Tính ngân sách theo khối lượng, vật liệu, hệ số hoàn thiện và rủi ro phát sinh.</p>
+            </div>
+          </article>
+
+          <article class="glass-card overflow-hidden rounded-[2rem]" data-aos="fade-up" data-aos-delay="100">
+            <img class="h-52 w-full object-cover" src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=900&q=80" alt="Không gian kiến trúc xanh với ánh sáng đẹp và vật liệu tự nhiên" />
+            <div class="p-7">
+              <span class="rounded-full bg-neon/10 px-3 py-1 text-xs font-bold text-forest">05 · Material</span>
+              <h3 class="mt-4 text-2xl font-black text-charcoal">Vật liệu xanh</h3>
+              <p class="mt-3 text-sm leading-7 text-slate-600">Đề xuất vật liệu tiết kiệm năng lượng, bền vững và phù hợp ngân sách thực tế.</p>
+            </div>
+          </article>
+
+          <article class="glass-card overflow-hidden rounded-[2rem]" data-aos="fade-up" data-aos-delay="200">
+            <img class="h-52 w-full object-cover" src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=900&q=80" alt="Kỹ sư dùng máy tính bảng để theo dõi mô hình công trình trên công trường" />
+            <div class="p-7">
+              <span class="rounded-full bg-neon/10 px-3 py-1 text-xs font-bold text-forest">06 · Control</span>
+              <h3 class="mt-4 text-2xl font-black text-charcoal">Dashboard thi công</h3>
+              <p class="mt-3 text-sm leading-7 text-slate-600">Theo dõi công trường theo thời gian thực: tiến độ, chi phí, chất lượng, an toàn.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= PORTFOLIO FILTER ========================= -->
+    <section id="portfolio" class="bg-white px-5 py-24 lg:px-8">
+      <div class="mx-auto max-w-7xl">
+        <div class="flex flex-col justify-between gap-8 lg:flex-row lg:items-end" data-aos="fade-up">
+          <div class="max-w-3xl">
+            <p class="mb-3 text-sm font-black uppercase tracking-[0.22em] text-forest">Dự án tiêu biểu</p>
+            <h2 class="text-4xl font-black tracking-[-0.05em] text-charcoal sm:text-6xl">Portfolio sang trọng, xanh và có thể đo lường.</h2>
+          </div>
+          <div class="flex flex-wrap gap-3" role="tablist" aria-label="Bộ lọc dự án">
+            <button class="filter-btn active rounded-full border border-forest/15 px-5 py-3 text-sm font-extrabold text-forest transition" data-filter="all">Tất cả</button>
+            <button class="filter-btn rounded-full border border-forest/15 px-5 py-3 text-sm font-extrabold text-forest transition" data-filter="villa">Biệt thự</button>
+            <button class="filter-btn rounded-full border border-forest/15 px-5 py-3 text-sm font-extrabold text-forest transition" data-filter="townhouse">Nhà phố</button>
+            <button class="filter-btn rounded-full border border-forest/15 px-5 py-3 text-sm font-extrabold text-forest transition" data-filter="green">Công trình xanh</button>
+          </div>
+        </div>
+
+        <div id="portfolioGrid" class="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <article class="portfolio-card glass-card overflow-hidden rounded-[2rem]" data-category="villa green" data-aos="zoom-in">
+            <img class="h-72 w-full object-cover" src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=85" alt="Phối cảnh biệt thự hiện đại sang trọng với sân vườn" />
+            <div class="p-7">
+              <div class="flex items-center justify-between gap-4"><span class="text-sm font-bold text-neon">Biệt thự xanh</span><span class="rounded-full bg-forest px-3 py-1 text-xs font-bold text-white">CO₂ -32%</span></div>
+              <h3 class="mt-3 text-2xl font-black">Eco Villa Horizon</h3>
+              <p class="mt-3 text-sm leading-7 text-slate-600">Biệt thự 2 tầng tích hợp mái xanh, kính Low-E và vườn mưa.</p>
+            </div>
+          </article>
+
+          <article class="portfolio-card glass-card overflow-hidden rounded-[2rem]" data-category="townhouse green" data-aos="zoom-in" data-aos-delay="100">
+            <img class="h-72 w-full object-cover" src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1000&q=85" alt="Nhà phố hiện đại có mặt tiền xanh và hình khối tối giản" />
+            <div class="p-7">
+              <div class="flex items-center justify-between gap-4"><span class="text-sm font-bold text-neon">Nhà phố</span><span class="rounded-full bg-forest px-3 py-1 text-xs font-bold text-white">BIM LOD 300</span></div>
+              <h3 class="mt-3 text-2xl font-black">Urban Green House</h3>
+              <p class="mt-3 text-sm leading-7 text-slate-600">Nhà phố 5×20m tối ưu thông gió, giếng trời và chi phí thi công.</p>
+            </div>
+          </article>
+
+          <article class="portfolio-card glass-card overflow-hidden rounded-[2rem]" data-category="villa" data-aos="zoom-in" data-aos-delay="200">
+            <img class="h-72 w-full object-cover" src="https://images.unsplash.com/photo-1600047509358-9dc75507daeb?auto=format&fit=crop&w=1000&q=85" alt="Biệt thự sang trọng với hồ bơi và ánh sáng chiều đẹp" />
+            <div class="p-7">
+              <div class="flex items-center justify-between gap-4"><span class="text-sm font-bold text-neon">Biệt thự</span><span class="rounded-full bg-forest px-3 py-1 text-xs font-bold text-white">Premium</span></div>
+              <h3 class="mt-3 text-2xl font-black">Lumen Residence</h3>
+              <p class="mt-3 text-sm leading-7 text-slate-600">Không gian nghỉ dưỡng cao cấp, hình khối tinh gọn và vật liệu tự nhiên.</p>
+            </div>
+          </article>
+
+          <article class="portfolio-card glass-card overflow-hidden rounded-[2rem]" data-category="green" data-aos="zoom-in">
+            <img class="h-72 w-full object-cover" src="https://images.unsplash.com/photo-1509395176047-4a66953fd231?auto=format&fit=crop&w=1000&q=85" alt="Công trình xanh tích hợp năng lượng mặt trời" />
+            <div class="p-7">
+              <div class="flex items-center justify-between gap-4"><span class="text-sm font-bold text-neon">Công trình xanh</span><span class="rounded-full bg-forest px-3 py-1 text-xs font-bold text-white">Solar</span></div>
+              <h3 class="mt-3 text-2xl font-black">Solar Green Office</h3>
+              <p class="mt-3 text-sm leading-7 text-slate-600">Văn phòng mini ứng dụng năng lượng mặt trời và vật liệu ít phát thải.</p>
+            </div>
+          </article>
+
+          <article class="portfolio-card glass-card overflow-hidden rounded-[2rem]" data-category="townhouse" data-aos="zoom-in" data-aos-delay="100">
+            <img class="h-72 w-full object-cover" src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1000&q=85" alt="Nhà phố hiện đại với mặt đứng sang trọng" />
+            <div class="p-7">
+              <div class="flex items-center justify-between gap-4"><span class="text-sm font-bold text-neon">Nhà phố</span><span class="rounded-full bg-forest px-3 py-1 text-xs font-bold text-white">Smart Cost</span></div>
+              <h3 class="mt-3 text-2xl font-black">Compact Smart House</h3>
+              <p class="mt-3 text-sm leading-7 text-slate-600">Mẫu nhà phố nhỏ nhưng giàu ánh sáng, kiểm soát ngân sách theo giai đoạn.</p>
+            </div>
+          </article>
+
+          <article class="portfolio-card glass-card overflow-hidden rounded-[2rem]" data-category="villa green" data-aos="zoom-in" data-aos-delay="200">
+            <img class="h-72 w-full object-cover" src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=1000&q=85" alt="Phối cảnh biệt thự tối giản với sân vườn và không gian mở" />
+            <div class="p-7">
+              <div class="flex items-center justify-between gap-4"><span class="text-sm font-bold text-neon">Biệt thự xanh</span><span class="rounded-full bg-forest px-3 py-1 text-xs font-bold text-white">Green Score 90</span></div>
+              <h3 class="mt-3 text-2xl font-black">Forest Edge Villa</h3>
+              <p class="mt-3 text-sm leading-7 text-slate-600">Biệt thự ven đô, ưu tiên thông gió tự nhiên và cảnh quan bản địa.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= TECHNOLOGY STACK ========================= -->
+    <section id="technology" class="relative overflow-hidden bg-ink px-5 py-24 text-white lg:px-8">
+      <div class="tech-grid-bg absolute inset-0 opacity-25"></div>
+      <div class="absolute left-1/2 top-0 h-96 w-96 -translate-x-1/2 rounded-full bg-neon/10 blur-3xl"></div>
+
+      <div class="relative mx-auto grid max-w-7xl gap-12 lg:grid-cols-[.95fr_1.05fr] lg:items-center">
+        <div data-aos="fade-right">
+          <div class="overflow-hidden rounded-[2rem] border border-white/12 bg-white/5 p-3 shadow-deep backdrop-blur-xl">
+            <img class="h-[420px] w-full rounded-[1.5rem] object-cover" src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1400&q=85" alt="Kỹ sư dùng máy tính bảng hiển thị mô hình 3D trên công trường" />
+          </div>
+        </div>
+
+        <div data-aos="fade-left">
+          <p class="mb-3 text-sm font-black uppercase tracking-[0.22em] text-neon">Tech Stack</p>
+          <h2 class="text-4xl font-black tracking-[-0.05em] sm:text-6xl">BIM, AI và IoT không phải buzzword. Đó là hệ điều hành công trường.</h2>
+          <p class="mt-6 leading-8 text-white/68">ARKHEON dùng công nghệ để biến thiết kế, dự toán và thi công thành một dòng dữ liệu xuyên suốt. Chủ đầu tư nhìn được rủi ro sớm, đội thi công giảm sai sót, kiến trúc sư bảo vệ được ý tưởng.</p>
+
+          <div class="mt-10 grid gap-5 md:grid-cols-3">
+            <article class="dark-glass-card rounded-[1.7rem] p-6" data-aos="fade-up" data-aos-delay="100">
+              <svg class="float-icon mb-6 h-16 w-16 text-neon" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+                <rect x="14" y="20" width="46" height="44" rx="6" stroke="currentColor" stroke-width="3" />
+                <path class="draw-line" d="M24 52L24 32L38 25L52 32V52H24Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round" />
+                <path d="M38 25V52" stroke="currentColor" stroke-width="3" opacity=".45" />
+              </svg>
+              <h3 class="text-xl font-black">BIM Model</h3>
+              <p class="mt-3 text-sm leading-7 text-white/62">Kiểm tra xung đột, bóc tách khối lượng và kết nối bản vẽ với chi phí.</p>
+            </article>
+
+            <article class="dark-glass-card rounded-[1.7rem] p-6" data-aos="fade-up" data-aos-delay="200">
+              <svg class="float-icon delay-1 mb-6 h-16 w-16 text-neon" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+                <circle cx="40" cy="40" r="24" stroke="currentColor" stroke-width="3" />
+                <path class="draw-line" d="M24 43C31 30 47 28 56 39C50 55 32 56 24 43Z" stroke="currentColor" stroke-width="3" />
+                <circle cx="40" cy="40" r="5" fill="currentColor" />
+              </svg>
+              <h3 class="text-xl font-black">AI Estimate</h3>
+              <p class="mt-3 text-sm leading-7 text-white/62">Gợi ý ngân sách, cảnh báo phát sinh và so sánh phương án vật liệu.</p>
+            </article>
+
+            <article class="dark-glass-card rounded-[1.7rem] p-6" data-aos="fade-up" data-aos-delay="300">
+              <svg class="float-icon delay-2 mb-6 h-16 w-16 text-neon" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+                <rect x="24" y="24" width="32" height="32" rx="8" stroke="currentColor" stroke-width="3" />
+                <path class="draw-line" d="M12 28H22M12 40H22M12 52H22M58 28H68M58 40H68M58 52H68M28 12V22M40 12V22M52 12V22M28 58V68M40 58V68M52 58V68" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+              </svg>
+              <h3 class="text-xl font-black">IoT Site</h3>
+              <p class="mt-3 text-sm leading-7 text-white/62">Camera, cảm biến và nhật ký công trường giúp tiến độ minh bạch hơn.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= ROADMAP ========================= -->
+    <section id="roadmap" class="bg-white px-5 py-24 lg:px-8">
+      <div class="mx-auto max-w-7xl">
+        <div class="mx-auto max-w-3xl text-center" data-aos="fade-up">
+          <p class="mb-3 text-sm font-black uppercase tracking-[0.22em] text-forest">Roadmap triển khai</p>
+          <h2 class="text-4xl font-black tracking-[-0.05em] text-charcoal sm:text-6xl">5 bước rõ ràng từ tư vấn đến bàn giao.</h2>
+        </div>
+
+        <div class="roadmap-line relative mt-16 grid gap-6 lg:grid-cols-5">
+          <article class="relative z-10 rounded-[2rem] bg-mist p-6" data-aos="fade-up">
+            <span class="pulse-dot grid h-16 w-16 place-items-center rounded-full bg-forest text-xl font-black text-neon">01</span>
+            <h3 class="mt-8 text-xl font-black">Tư vấn</h3>
+            <p class="mt-3 text-sm leading-7 text-slate-600">Làm rõ nhu cầu, ngân sách, phong cách và tiêu chí xanh.</p>
+          </article>
+          <article class="relative z-10 rounded-[2rem] bg-mist p-6" data-aos="fade-up" data-aos-delay="100">
+            <span class="pulse-dot grid h-16 w-16 place-items-center rounded-full bg-forest text-xl font-black text-neon">02</span>
+            <h3 class="mt-8 text-xl font-black">Thiết kế</h3>
+            <p class="mt-3 text-sm leading-7 text-slate-600">Triển khai concept, mặt bằng và phối cảnh dễ hiểu.</p>
+          </article>
+          <article class="relative z-10 rounded-[2rem] bg-mist p-6" data-aos="fade-up" data-aos-delay="200">
+            <span class="pulse-dot grid h-16 w-16 place-items-center rounded-full bg-forest text-xl font-black text-neon">03</span>
+            <h3 class="mt-8 text-xl font-black">BIM & dự toán</h3>
+            <p class="mt-3 text-sm leading-7 text-slate-600">Mô hình hóa, bóc tách khối lượng, dự báo chi phí.</p>
+          </article>
+          <article class="relative z-10 rounded-[2rem] bg-mist p-6" data-aos="fade-up" data-aos-delay="300">
+            <span class="pulse-dot grid h-16 w-16 place-items-center rounded-full bg-forest text-xl font-black text-neon">04</span>
+            <h3 class="mt-8 text-xl font-black">Thi công</h3>
+            <p class="mt-3 text-sm leading-7 text-slate-600">Giám sát tiến độ, chất lượng, vật liệu và an toàn.</p>
+          </article>
+          <article class="relative z-10 rounded-[2rem] bg-mist p-6" data-aos="fade-up" data-aos-delay="400">
+            <span class="pulse-dot grid h-16 w-16 place-items-center rounded-full bg-forest text-xl font-black text-neon">05</span>
+            <h3 class="mt-8 text-xl font-black">Bàn giao</h3>
+            <p class="mt-3 text-sm leading-7 text-slate-600">Bàn giao hồ sơ số, nhật ký và hướng dẫn vận hành.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= TESTIMONIALS ========================= -->
+    <section class="relative overflow-hidden bg-forest px-5 py-24 text-white lg:px-8">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(34,197,94,.20),transparent_35%),radial-gradient(circle_at_80%_30%,rgba(255,255,255,.08),transparent_30%)]"></div>
+      <div class="relative mx-auto max-w-7xl">
+        <div class="mx-auto max-w-3xl text-center" data-aos="fade-up">
+          <p class="mb-3 text-sm font-black uppercase tracking-[0.22em] text-neon">Testimonials</p>
+          <h2 class="text-4xl font-black tracking-[-0.05em] sm:text-6xl">Niềm tin đến từ sự minh bạch.</h2>
+        </div>
+
+        <div class="mt-14 grid gap-6 lg:grid-cols-3">
+          <article class="dark-glass-card rounded-[2rem] p-8" data-aos="fade-up">
+            <div class="text-neon">★★★★★</div>
+            <p class="mt-6 leading-8 text-white/72">“ARKHEON giúp tôi hiểu rõ thiết kế, chi phí và tiến độ trước khi đặt bút ký hợp đồng.”</p>
+            <div class="mt-8 flex items-center gap-4">
+              <div class="grid h-12 w-12 place-items-center rounded-full bg-neon font-black text-ink">MA</div>
+              <div><strong>Minh Anh</strong><span class="block text-sm text-white/55">Chủ nhà phố</span></div>
+            </div>
+          </article>
+          <article class="dark-glass-card rounded-[2rem] p-8" data-aos="fade-up" data-aos-delay="100">
+            <div class="text-neon">★★★★★</div>
+            <p class="mt-6 leading-8 text-white/72">“Mô hình BIM làm đội thi công ít tranh cãi hơn, mọi hạng mục đều có dữ liệu để đối chiếu.”</p>
+            <div class="mt-8 flex items-center gap-4">
+              <div class="grid h-12 w-12 place-items-center rounded-full bg-neon font-black text-ink">HN</div>
+              <div><strong>Hoàng Nam</strong><span class="block text-sm text-white/55">Nhà thầu nhỏ</span></div>
+            </div>
+          </article>
+          <article class="dark-glass-card rounded-[2rem] p-8" data-aos="fade-up" data-aos-delay="200">
+            <div class="text-neon">★★★★★</div>
+            <p class="mt-6 leading-8 text-white/72">“Dashboard giúp tôi theo dõi dự án văn phòng mà không cần có mặt liên tục ở công trường.”</p>
+            <div class="mt-8 flex items-center gap-4">
+              <div class="grid h-12 w-12 place-items-center rounded-full bg-neon font-black text-ink">KH</div>
+              <div><strong>Khánh Hòa</strong><span class="block text-sm text-white/55">Chủ đầu tư</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= NEWS ========================= -->
+    <section id="news" class="bg-mist px-5 py-24 lg:px-8">
+      <div class="mx-auto max-w-7xl">
+        <div class="flex flex-col justify-between gap-6 lg:flex-row lg:items-end" data-aos="fade-up">
+          <div class="max-w-3xl">
+            <p class="mb-3 text-sm font-black uppercase tracking-[0.22em] text-forest">Tin tức & góc nhìn</p>
+            <h2 class="text-4xl font-black tracking-[-0.05em] text-charcoal sm:text-6xl">Cập nhật xu hướng xây dựng xanh.</h2>
+          </div>
+          <a href="#contact" class="rounded-full border border-forest/15 px-6 py-3 font-extrabold text-forest transition hover:bg-forest hover:text-white">Nhận tư vấn</a>
+        </div>
+
+        <div class="mt-12 grid gap-6 lg:grid-cols-3">
+          <article class="glass-card overflow-hidden rounded-[2rem]" data-aos="fade-up">
+            <img class="h-56 w-full object-cover" src="https://images.unsplash.com/photo-1509395176047-4a66953fd231?auto=format&fit=crop&w=900&q=80" alt="Tấm pin năng lượng mặt trời trong công trình xanh" />
+            <div class="p-7"><span class="text-sm font-bold text-neon">Green Energy</span><h3 class="mt-3 text-2xl font-black">Khi nào nhà phố nên dùng năng lượng mặt trời?</h3><p class="mt-3 text-sm leading-7 text-slate-600">Góc nhìn thực tế về chi phí, mái, hướng nắng và khả năng hoàn vốn.</p></div>
+          </article>
+          <article class="glass-card overflow-hidden rounded-[2rem]" data-aos="fade-up" data-aos-delay="100">
+            <img class="h-56 w-full object-cover" src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=900&q=80" alt="Tòa nhà kiến trúc hiện đại với hình khối mạnh mẽ" />
+            <div class="p-7"><span class="text-sm font-bold text-neon">BIM Insight</span><h3 class="mt-3 text-2xl font-black">BIM giúp giảm phát sinh trong thi công ra sao?</h3><p class="mt-3 text-sm leading-7 text-slate-600">Từ clash detection đến bóc tách khối lượng và nghiệm thu kỹ thuật.</p></div>
+          </article>
+          <article class="glass-card overflow-hidden rounded-[2rem]" data-aos="fade-up" data-aos-delay="200">
+            <img class="h-56 w-full object-cover" src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=900&q=80" alt="Không gian nội thất hiện đại nhiều ánh sáng tự nhiên" />
+            <div class="p-7"><span class="text-sm font-bold text-neon">Healthy Space</span><h3 class="mt-3 text-2xl font-black">Ánh sáng tự nhiên là vật liệu thiết kế.</h3><p class="mt-3 text-sm leading-7 text-slate-600">Cách tối ưu cửa, lam, giếng trời và lớp đệm xanh trong nhà ở.</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= CONTACT ========================= -->
+    <section id="contact" class="bg-white px-5 py-24 lg:px-8">
+      <div class="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[.9fr_1.1fr] lg:items-start">
+        <div data-aos="fade-right">
+          <p class="mb-3 text-sm font-black uppercase tracking-[0.22em] text-forest">Liên hệ</p>
+          <h2 class="text-4xl font-black tracking-[-0.05em] text-charcoal sm:text-6xl">Kể ARKHEON nghe về công trình của bạn.</h2>
+          <p class="mt-6 leading-8 text-slate-600">Form này hoạt động ở frontend để demo. Khi gửi thành công, website sẽ xác nhận thông tin ngay trên màn hình.</p>
+
+          <div class="mt-8 grid gap-4 sm:grid-cols-2">
+            <div class="rounded-[1.5rem] bg-mist p-5"><span class="text-sm font-bold text-forest">Hotline</span><strong class="mt-2 block text-lg">+84 123 456 789</strong></div>
+            <div class="rounded-[1.5rem] bg-mist p-5"><span class="text-sm font-bold text-forest">Email</span><strong class="mt-2 block text-lg">hello@arkheon.vn</strong></div>
+            <div class="rounded-[1.5rem] bg-mist p-5"><span class="text-sm font-bold text-forest">Studio</span><strong class="mt-2 block text-lg">Hà Nội, Việt Nam</strong></div>
+            <div class="rounded-[1.5rem] bg-mist p-5"><span class="text-sm font-bold text-forest">Response</span><strong class="mt-2 block text-lg">Trong 24 giờ</strong></div>
+          </div>
+        </div>
+
+        <form id="contactForm" class="rounded-[2rem] border border-forest/10 bg-mist p-5 shadow-2xl sm:p-8" data-aos="fade-left" novalidate>
+          <div class="grid gap-5 sm:grid-cols-2">
+            <label class="grid gap-2 text-sm font-bold text-charcoal">Tên của bạn
+              <input id="name" class="input-modern" type="text" placeholder="Nguyễn Văn A" />
+            </label>
+            <label class="grid gap-2 text-sm font-bold text-charcoal">Số điện thoại
+              <input id="phone" class="input-modern" type="tel" placeholder="0912 345 678" />
+            </label>
+            <label class="grid gap-2 text-sm font-bold text-charcoal">Loại công trình
+              <select id="projectType" class="input-modern">
+                <option>Biệt thự</option>
+                <option>Nhà phố</option>
+                <option>Công trình xanh</option>
+                <option>Văn phòng</option>
+                <option>Cải tạo</option>
+              </select>
+            </label>
+            <label class="grid gap-2 text-sm font-bold text-charcoal">Ngân sách dự kiến
+              <select id="budget" class="input-modern">
+                <option>Dưới 1 tỷ</option>
+                <option>1 – 3 tỷ</option>
+                <option>3 – 7 tỷ</option>
+                <option>Trên 7 tỷ</option>
+              </select>
+            </label>
+            <label class="grid gap-2 text-sm font-bold text-charcoal sm:col-span-2">Ghi chú
+              <textarea id="note" class="input-modern min-h-36 resize-y" placeholder="Tôi muốn thiết kế biệt thự xanh, có BIM, dự toán rõ ràng và dashboard theo dõi thi công..."></textarea>
+            </label>
+          </div>
+
+          <button class="btn-glow mt-7 w-full rounded-full bg-gradient-to-r from-neon to-forest px-7 py-4 font-extrabold text-white transition hover:-translate-y-1" type="submit">Gửi yêu cầu tư vấn</button>
+          <p id="formStatus" class="mt-4 min-h-6 text-sm font-bold"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================= FOOTER ========================= -->
+  <footer class="bg-ink px-5 py-12 text-white lg:px-8">
+    <div class="mx-auto flex max-w-7xl flex-col justify-between gap-8 md:flex-row md:items-center">
+      <div>
+        <strong class="text-2xl font-black tracking-[0.22em]">ARKHEON</strong>
+        <p class="mt-2 max-w-xl text-sm text-white/55">Xây dựng giá trị nguyên bản, kiến tạo tương lai bằng kiến trúc xanh và công nghệ xây dựng.</p>
+      </div>
+      <div class="flex flex-wrap gap-3 text-sm text-white/65">
+        <a class="hover:text-neon" href="#services">Dịch vụ</a>
+        <a class="hover:text-neon" href="#portfolio">Dự án</a>
+        <a class="hover:text-neon" href="#technology">Công nghệ</a>
+        <a class="hover:text-neon" href="#contact">Liên hệ</a>
+      </div>
+    </div>
+    <div class="mx-auto mt-10 max-w-7xl border-t border-white/10 pt-6 text-sm text-white/45">© 2026 ARKHEON GreenBuild. Demo SPA phục vụ trình bày mô hình khởi nghiệp.</div>
+  </footer>
+
+  <button id="backToTop" class="fixed bottom-5 right-5 z-40 hidden h-12 w-12 rounded-full bg-neon font-black text-ink shadow-glow" aria-label="Lên đầu trang">↑</button>
+
+  <!-- AOS JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+  <script>
+    // Khởi tạo AOS: hiệu ứng khi cuộn trang
+    if (window.AOS) {
+      AOS.init({
+        duration: 850,
+        easing: 'ease-out-cubic',
+        once: true,
+        offset: 90
+      });
+    }
+
+    // Navbar đổi nền khi scroll + back-to-top
+    const navbar = document.getElementById('navbar');
+    const backToTop = document.getElementById('backToTop');
+
+    function handleScrollState() {
+      const isScrolled = window.scrollY > 40;
+      navbar.classList.toggle('scrolled', isScrolled);
+      backToTop.classList.toggle('hidden', window.scrollY < 700);
+    }
+
+    handleScrollState();
+    window.addEventListener('scroll', handleScrollState, { passive: true });
+
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Mobile menu
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+      navbar.classList.add('scrolled');
+    });
+
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+    });
+
+    // Portfolio filter
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const portfolioCards = document.querySelectorAll('.portfolio-card');
+
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const filter = button.dataset.filter;
+
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        portfolioCards.forEach(card => {
+          const categories = card.dataset.category || '';
+          const shouldShow = filter === 'all' || categories.includes(filter);
+
+          card.style.opacity = '0';
+          card.style.transform = 'scale(.96)';
+
+          setTimeout(() => {
+            card.classList.toggle('hidden-card', !shouldShow);
+            if (shouldShow) {
+              card.style.opacity = '1';
+              card.style.transform = 'scale(1)';
+            }
+            if (window.AOS) AOS.refreshHard();
+          }, 180);
+        });
+      });
+    });
+
+    // Validate form liên hệ
+    const contactForm = document.getElementById('contactForm');
+    const formStatus = document.getElementById('formStatus');
+    const nameInput = document.getElementById('name');
+    const phoneInput = document.getElementById('phone');
+
+    contactForm.addEventListener('submit', event => {
+      event.preventDefault();
+      let valid = true;
+
+      [nameInput, phoneInput].forEach(input => input.classList.remove('form-error'));
+      formStatus.textContent = '';
+      formStatus.className = 'mt-4 min-h-6 text-sm font-bold';
+
+      if (!nameInput.value.trim()) {
+        nameInput.classList.add('form-error');
+        valid = false;
+      }
+
+      if (!phoneInput.value.trim()) {
+        phoneInput.classList.add('form-error');
+        valid = false;
+      }
+
+      if (!valid) {
+        formStatus.textContent = 'Ní nhập giúp tui tên và số điện thoại trước nha.';
+        formStatus.classList.add('text-red-600');
+        return;
+      }
+
+      formStatus.textContent = 'Cảm ơn bạn! ARKHEON đã ghi nhận thông tin tư vấn.';
+      formStatus.classList.add('text-forest');
+      contactForm.reset();
+    });
+  </script>
+</body>
+</html>
